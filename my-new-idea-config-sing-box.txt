@@ -1,0 +1,339 @@
+{
+  "dns": {
+    "servers": [
+      {
+        //Creating your own dns server.
+        //If there are parameters “IN CDNSKEY”,“IN CDS”,“IN CERT”,“IN DANE”, 
+        //“IN DLV”,“IN DNSKEY”,“IN DS”,“IN HIP”,“IN KEY”,‘IN KX’,‘IN NSEC3’,
+        //‘IN NSEC3PARAM’,‘IN NXT’,‘IN RRSIG’,‘IN SIG’,‘IN SSHFP’,‘IN TA’,
+        //‘IN TKEY’,‘IN TLSA’,‘IN TSIG’,“IPSECKEY” then ignore any change 
+        //in the current dns response to avoid getting the dns response 
+        //ignored due to checking the dns response for changes
+        "address_create": "",
+        "tcp_support": 1
+      }
+    ],
+    "rules": [
+      {
+        //add a dns response to the received dns response from the dns server
+        "add_dns_response": [
+          "10.254.0.1"
+        ],
+        //Remove the specified ip from the dns response from the 
+        //received dns response from the dns server
+        "del_dns_response": [
+        ]
+      },
+      {
+        "dns_response_rules": [
+          {
+            //We specify the action when a specific
+            //DNS response is available
+            "if_dns_respose": "",
+            "set_rcode": "",
+            "add_dns_response": [
+              "10.254.0.1"
+            ],
+            "del_dns_response": [
+            ]
+          }
+        ]
+      },
+      {
+        //Actions in case of unavailability of DNS servers
+        "unavailability_rules": [
+          {  
+            "domain": [
+              "test.com"
+            ],
+            "domain_suffix": [
+              ".cn"
+            ],
+            "domain_keyword": [
+              "test"
+            ],
+            "set_rcode": "",
+            "check_status_code": [
+              "ip": "",
+              "port": ""
+            ],
+            "if_status_code": [
+            ],
+            "other_status_code: [
+              "set_rcode": "",
+              "address": "",
+              "dns_response": [
+                "10.254.0.1",
+                "dns_cache"
+              ]
+            ]
+            "address": "",
+            "dns_response": [
+            "10.254.0.1",
+            "dns_cache"
+            ]
+          }
+        ]
+      },
+      {
+        //Actions in case of a certain rcode value
+        "rcode_rules": [
+          {
+            "if_rcode": [
+            ],
+            "domain": [
+              "test.com"
+            ],
+            "domain_suffix": [
+              ".cn"
+            ],
+            "domain_keyword": [
+              "test"
+            ],
+            "geosite": [
+            ],
+            "geoip": [
+            ],
+            //changing the rcode value
+            "new_rcode": "",
+            //We request the response header from 
+            //the specified server for the domain 
+            //to find out the status code and based
+            //on the status code, further decisions
+            //will be made about which DNS 
+            //response to issue
+            "check_status_code": [
+              "ip": "",
+              "port": ""
+            ],
+            //Action for certain status codes
+            "if_status_code": [
+            ],
+            //Actions for other status codes
+            "other_status_code: [
+              "rcode": "no_change",
+              "address": "",
+              "dns_response": [
+                "10.254.0.1",
+                "dns_cache"
+              ]
+            ]
+            "address": "",
+            "dns_response": [
+              "10.254.0.1",
+              "dns_cache"
+            ]
+          }
+        ]
+      }
+  },
+  "inbounds": [
+      {
+      "type": "wifi",
+      "tag": "wifi",
+      "ssid": "My Network",
+      "password": [
+      "password1","password2"
+      ],
+      "type_security": "wpa2",
+      //The IP range in which devices will be assigned
+      "ip_cidr": [
+      192.168.1.1/24","10.0.0.1/24"
+      ],
+      "bind_interface": "en0",
+      "max_clients": "",
+      "timeout_connection": "",
+      "set_domain_clients": "",
+      //https://en.wikipedia.org/wiki/Captive_portal
+      "captive_portal": [
+        "server_ip": "",
+        "server_port": "",
+        "server_domain": "",
+        "captive_portal_ip": "",
+        "captive_portal_port": "",
+        "captive_portal_domain": ""
+      ],
+      "allow protocols": [
+      "tcp","udp","igmp","dns","bittorrent","ssh","rdp","ftp","https","http","quic"
+      ],
+      "block_protocols": [
+      ]
+    },
+    {
+      "type": "tun",
+      //Virtual adapter driver "windscribe" or "wiregward" 
+      //or "tap_openvpn" or "sing_tun" or "vmware" or "virtualbox"
+      "driver": "Windscribe"
+      "allow protocols": [
+      "tcp","udp","igmp"
+      ],
+      "block_protocols": [
+      ]
+    }
+  ],
+  "settings": [
+    "cpu_load": "10%",
+    "ram_load": "",
+    "cpu_cores": "",
+    "autorun_on_boot": "",
+    "delay_autorun": ""
+  ],
+  "outbounds": [
+    {
+      "type": "teredo",
+      "tag": "teredo",
+      "server": [
+      "teredo.iks-jena.de","teredo.remlab.net"
+      ],
+      "bind_interface": "en0"
+    },
+    {
+      "type": "l2tp",
+      "tag": "l2tp",
+      "server": "public-vpn-119.opengw.net",
+      "username": "vpn",
+      "password": "vpn",
+      "static_route": [
+        {
+          "ip": "",
+          "netmask": "",
+          "gateway": "",
+        }
+      ],
+      "allow protocols": [
+      "tcp","udp","igmp"
+      ],
+      "block_protocols": [
+      ],
+      "bind_interface": "en0"
+    },
+    {
+      "type": "pptp",
+    },
+    {
+      "type": "sstp",
+    },
+    {
+      "type": "ikev2",
+    },
+    {
+      "type": "ms-sstp",
+      "tag": "ms-sstp",
+      "server": "public-vpn-119.opengw.net",
+      "username": "vpn",
+      "password": "vpn",
+      "bind_interface": "en0"
+    },
+    {
+      "type": "openvpn",
+      "tag": "openvpn",
+      "path": "D:\myconfig.ovpn",
+      "download_url": "",
+      "bind_interface": "en0"
+    },
+    { 
+      "type": "subscriptions",
+      "tag": "v2ray-configs-proxy-list",
+      "path": "D:\mylist.txt",
+      "download_url": [
+        "",""
+      ],
+      "update_frequency": "86400
+",
+      //Search for available ports in case of blocked access 
+      //to the Internet by government/provider whitelisting of ports.
+      "check_ports": 1,
+      //Redirect all internet traffic to a proxy running on an unblocked port
+      "proxy_port": 1,
+      "bind_interface": "en0"
+    },
+    {
+      "type": "warp",
+      "tag": "warp"
+    },
+    {
+      "type": "direct",
+      //Attempt to prevent blocking of Internet connection
+      //using GoodByeDPI application technology
+      "goodbyedpi": 1,
+      //Mini-antivirus to scan Internet traffic for viruses 
+      //in real time without slowing down the Internet connection
+      "antivirus": 1,
+      //https://en.wikipedia.org/wiki/Intrusion_detection_system
+      "ips_protection": 1
+      "speed_download_limit": "",
+      "speed_upload_limit": "",
+      "latency": ""
+    },
+    {
+      "type": "juicity"
+      "tag": "juicity"
+      "uuid": "",
+      "password": "",
+      "ip": "",
+      "port": "",
+      "congestion_control": "bbr",
+      "sni": "",
+      "allow_insecure": 0,
+      "pinned_certchain_sha256": ""
+    },
+    {
+      //DNS proxy tunnel
+      "type": "dnstt"
+    },
+    {
+      "type": "multiwan",
+      "tag": "multiwan",
+      "bind_interface": [
+      "en0","en1"
+      "allow protocols": [
+      "tcp","udp","igmp"
+      ],
+      "block_protocols": [
+      ]
+    },
+    {
+      "type": "pac_file",
+      "tag": "pac_file",
+      "path": "",
+      "download_url": "",
+      "update_frequency": "86400",
+    }
+  ],
+  "route": {
+    "static_route": [
+      {
+        "ip": "",
+        "netmask": "",
+        "gateway": "",
+        "bind_interface": ""
+      }
+    ]
+  },
+  //Modification of http connection to sites
+  "http_mod": [
+    {
+      "tag": "",
+      "if_status_code": "",
+      "new_status_code": "",
+      //analog function replace
+      "path_file": "",
+      //redirect via response headers
+      "location": "",
+      //Immediately getting the content from
+      //the link with the location (redirect)
+      //value from the response header without 
+      //getting the response header with the 
+      //location parameter for the client
+      "hide_redirect": "",
+      //The same as in Nginx, but only the 
+      //links in html and css that are 
+      //specified in proxy_pass will be 
+      //replaced with the requested site page
+      "proxy_pass": "",
+      "replace": [
+      ],
+      "outbound": ""
+    }
+  ]
+}
