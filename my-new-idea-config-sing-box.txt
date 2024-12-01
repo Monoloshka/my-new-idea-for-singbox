@@ -171,13 +171,6 @@
       ]
     }
   ],
-  "settings": [
-    "cpu_load": "10%",
-    "ram_load": "",
-    "cpu_cores": "",
-    "autorun_on_boot": "",
-    "delay_autorun": ""
-  ],
   "outbounds": [
     {
       "type": "teredo",
